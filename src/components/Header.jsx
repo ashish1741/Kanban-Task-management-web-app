@@ -1,21 +1,29 @@
 import React, { useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import HeaderDropDown from "./HeaderDropDown";
+import AddEditBoardModal from "../modals/AddEditBoardModal";
 
-function Header() {
+function Header({ boardOpen, setBoardOpen }) {
   const [dropDown, setDropDown] = useState(false);
 
   return (
     <div className="bg-white left-0 fixed p-4 dark:bg-[#2b2c37] z-50 right-0">
       <header className="flex justify-between dark:text-white items-center">
         <div>
-          <h1 className="font-semibold text-4xl dark:text-white font-sans">MeroNote</h1>
+          <h1 className="font-semibold text-4xl dark:text-white font-sans">
+            MeroNote
+          </h1>
         </div>
         <div className="flex items-center">
-          <h3 className="truncate max-w-[200px] md:text-2xl text-xl font-bold md:ml-20 font-sans">board name</h3>
-          <span className="w-3 ml-2 md:hidden cursor-pointer" onClick={() => setDropDown(prevState => !prevState)}>
+          <h3 className="truncate max-w-[200px] md:text-2xl text-xl font-bold md:ml-20 font-sans">
+            board name
+          </h3>
+          <span
+            className="w-3 ml-2 md:hidden cursor-pointer"
+            onClick={() => setDropDown((prevState) => !prevState)}
+          >
             {dropDown ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
           </span>
         </div>
@@ -26,7 +34,10 @@ function Header() {
         </div>
       </header>
 
-      {dropDown && < HeaderDropDown  setDropDown = {setDropDown} />}
+      {dropDown && (
+        <HeaderDropDown setBoardOpen={setBoardOpen} setDropDown={setDropDown} />
+      )}
+      {boardOpen && <AddEditBoardModal setBoardOpen={setBoardOpen}  />}
     </div>
   );
 }

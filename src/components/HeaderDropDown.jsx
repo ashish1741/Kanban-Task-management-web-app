@@ -6,8 +6,7 @@ import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import Switch from "@mui/material/Switch";
 import useDarkMode from "../hooks/UseDarkMode";
 
-function HeaderDropDown({ setDropDown }) {
-  const label = { cinputProps: { dark: "Light" } };
+function HeaderDropDown({ setDropDown , setBoardOpen }) {
   const boards = useSelector((state) => state.boards);
 
   const [colorThem, setTheme] = useDarkMode();
@@ -17,6 +16,13 @@ function HeaderDropDown({ setDropDown }) {
     setTheme(colorThem === "light" ? "dark" : "light");
     setDarkSide(!darkSide);
   };
+
+  const createBoardHanlder = () => {
+    setBoardOpen(true)
+    setDropDown(false)
+
+
+  }
 
   return (
     <div
@@ -45,14 +51,16 @@ function HeaderDropDown({ setDropDown }) {
                 key={index}
               >
                 <AcUnitIcon className="h-4 w-4" />
-                <p className="text-lg font-bold cursor-pointer">{ele.name}</p>
+                <p className="text-lg dark:text-white font-bold cursor-pointer">{ele.name}</p>
               </div>
             );
           })}
 
           <div className="flex items-center space-x-2 text-[#635fc7] px-5 py-4">
             <AcUnitIcon className="h-4 w-4" />
-            <p className="text-lg font-bold cursor-pointer">
+            <p className="text-lg font-bold cursor-pointer" 
+            onClick={createBoardHanlder}
+            >
               Create A New Board
             </p>
           </div>
@@ -64,11 +72,11 @@ function HeaderDropDown({ setDropDown }) {
               onChange={toggleDarkModeHandler}
               className={`${
                 darkSide ? "" : "bg-gray-200"
-              } inline-block h-4 w-11 items-center rounded-full`}
+              } inline-block h-4 w-11 items-center rounded-md`}
             >
               <span
                 className={`${
-                  darkSide ?  "translate-x-6" : "translate-x-1"
+                  darkSide ? "translate-x-6" : "translate-x-1"
                 } inline-block h-4 w-4 transform  bg-white transition `}
               ></span>
             </Switch>
