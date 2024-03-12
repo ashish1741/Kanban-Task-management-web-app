@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import Switch from "@mui/material/Switch";
 import useDarkMode from "../hooks/UseDarkMode";
+import boardsSlice from "../redux/boardSlice";
 
 function HeaderDropDown({ setDropDown , setBoardOpen }) {
+  const disPatch =  useDispatch()
   const boards = useSelector((state) => state.boards);
 
   const [colorThem, setTheme] = useDarkMode();
@@ -49,6 +51,9 @@ function HeaderDropDown({ setDropDown , setBoardOpen }) {
                     : ""
                 }`}
                 key={index}
+                onClick={ () => {
+                  disPatch(boardsSlice.actions.setBoardActive({index}))
+                }}
               >
                 <AcUnitIcon className="h-4 w-4" />
                 <p className="text-lg dark:text-white font-bold cursor-pointer">{ele.name}</p>

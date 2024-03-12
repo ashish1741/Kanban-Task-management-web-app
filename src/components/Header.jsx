@@ -4,9 +4,15 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import HeaderDropDown from "./HeaderDropDown";
 import AddEditBoardModal from "../modals/AddEditBoardModal";
+import { useSelector } from "react-redux";
+import AddEditTaskModal from "../modals/AddEditTaskModal";
 
 function Header({ boardOpen, setBoardOpen }) {
+  const boards = useSelector((state) => state.boards);
+  const board = boards.find((board) => board.isActive);
   const [dropDown, setDropDown] = useState(false);
+  const [openEditBoard, setopenEditBoard] = useState(false);
+  const [boardType, setboardType] = useState("add");
 
   return (
     <div className="bg-white left-0 fixed p-4 dark:bg-[#2b2c37] z-50 right-0">
@@ -18,7 +24,7 @@ function Header({ boardOpen, setBoardOpen }) {
         </div>
         <div className="flex items-center">
           <h3 className="truncate max-w-[200px] md:text-2xl text-xl font-bold md:ml-20 font-sans">
-            board name
+            {board.name}
           </h3>
           <span
             className="w-3 ml-2 md:hidden cursor-pointer"
@@ -29,7 +35,14 @@ function Header({ boardOpen, setBoardOpen }) {
         </div>
         <div className="flex items-center space-x-4 md:space-x-6">
           <button className="btn hidden md:block ">Add a Task +</button>
-          <button className="btn text-lg md:hidden">+</button>
+          <button
+            className="btn text-lg md:hidden"
+            onClick={() => {
+              setopenEditBoard((state) => !state);
+            }}
+          >
+            +
+          </button>
           <MoreVertIcon className="cursor-pointer h-6 " />
         </div>
       </header>
@@ -37,7 +50,18 @@ function Header({ boardOpen, setBoardOpen }) {
       {dropDown && (
         <HeaderDropDown setBoardOpen={setBoardOpen} setDropDown={setDropDown} />
       )}
-      {boardOpen && <AddEditBoardModal setBoardOpen={setBoardOpen}  />}
+      {boardOpen && (
+        <AddEditBoardModal setBoardOpen={setBoardOpen} type={boardType} />
+      )}
+
+      {openEditBoard && (
+        <AddEditTaskModal
+          setopenEditBoard={setopenEditBoard}
+          openEditBoard={openEditBoard}
+          device={'mobile'}
+          
+        />
+      )}
     </div>
   );
 }

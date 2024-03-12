@@ -1,41 +1,38 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import CancelIcon from '@mui/icons-material/Cancel';
+import CancelIcon from "@mui/icons-material/Cancel";
 import { useDispatch } from "react-redux";
-import boardsSlice from "../redux/boardSlice"
+import boardsSlice from "../redux/boardSlice";
 
 function AddEditBoardModal({ setBoardOpen, type }) {
-
-  const dispatch =  useDispatch()
+  const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [isValid, setIsValid] = useState(true);
-  const [boardType, setboardType] = useState('add')
   const [newColumns, setnewColumns] = useState([
     { name: "Todo", tasks: [], id: uuidv4() },
     { name: "Doing", tasks: [], id: uuidv4() },
-  ])
-
+  ]);
 
   const onChange = (id, newValue) => {
     setnewColumns((prevState) => {
       const newState = [...prevState];
       const column = newState.find((col) => col.id === id);
       column.name = newValue;
-      return newState;
+      return newState;  
     });
   };
 
+
   const onDelete = (id) => {
     setnewColumns((prevState) => prevState.filter((el) => el.id !== id));
-
-  }
+  };
 
   const validate = () => {
     setIsValid(false);
     if (!name.trim()) {
       return false;
     }
-    for (let i = 0 ; i < newColumns.length ; i++) {
+    for (let i = 0; i < newColumns.length; i++) {
       if (!newColumns[i].name.trim()) {
         return false;
       }
@@ -43,7 +40,6 @@ function AddEditBoardModal({ setBoardOpen, type }) {
     setIsValid(true);
     return true;
   };
-
 
   const onSubmit = (type) => {
     setBoardOpen(false);
@@ -53,9 +49,6 @@ function AddEditBoardModal({ setBoardOpen, type }) {
       dispatch(boardsSlice.actions.editBoard({ name, newColumns }));
     }
   };
-
-
-  
 
   return (
     <div
@@ -93,7 +86,6 @@ function AddEditBoardModal({ setBoardOpen, type }) {
         <div className="mt-8 flex flex-col space-y-3">
           <label className=" text-sm dark:text-white text-gray-500">
             Board Columns
-            
           </label>
 
           {newColumns.map((column, index) => (
@@ -114,41 +106,29 @@ function AddEditBoardModal({ setBoardOpen, type }) {
               />
             </div>
           ))}
-
-
-
-
-
-
-
         </div>
 
         <button
-              className=" w-full items-center hover:opacity-70 dark:text-[#635fc7] dark:bg-white  text-white bg-[#635fc7] py-2 rounded-full "
-              onClick={() => {
-                setnewColumns((state) => [
-                  ...state,
-                  { name: "", tasks: [], id: uuidv4() },
-                ]);
-              }}
-            >
-              + Add New Column
-            </button>
+          className=" w-full items-center hover:opacity-70 dark:text-[#635fc7] dark:bg-white  text-white bg-[#635fc7] py-2 rounded-full "
+          onClick={() => {
+            setnewColumns((state) => [
+              ...state,
+              { name: "", tasks: [], id: uuidv4() },
+            ]);
+          }}
+        >
+          + Add New Column
+        </button>
 
-            <button
-              onClick={() => {
-                const isValid = validate();
-                if (isValid === true) onSubmit(boardType);
-              }}
-              className=" w-full items-center hover:opacity-70 dark:text-white dark:bg-[#635fc7] mt-8 relative  text-white bg-[#635fc7] py-2 rounded-full"
-            >
-              {boardType === "add" ? "Create New Board" : "Save Changes"}
-            </button>
-
-
-
-
-
+        <button
+          onClick={() => {
+            const isValid = validate();
+            if (isValid === true) onSubmit(type);
+          }}
+          className=" w-full items-center hover:opacity-70 dark:text-white dark:bg-[#635fc7] mt-8 relative  text-white bg-[#635fc7] py-2 rounded-full"
+        >
+          {type === "add" ? "Create New Board" : "Save Changes"}
+        </button>
       </div>
     </div>
   );
