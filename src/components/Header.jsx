@@ -16,7 +16,7 @@ function Header() {
         <div className="flex items-center">
           <h3 className="truncate max-w-[200px] md:text-2xl text-xl font-bold md:ml-20 font-sans">board name</h3>
           <span className="w-3 ml-2 md:hidden cursor-pointer" onClick={() => setDropDown(prevState => !prevState)}>
-            {dropDown ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
+            {dropDown ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
           </span>
         </div>
         <div className="flex items-center space-x-4 md:space-x-6">

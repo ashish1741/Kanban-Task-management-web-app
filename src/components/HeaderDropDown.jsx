@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import Switch from "@mui/material/Switch";
-
+import useDarkMode from "../hooks/UseDarkMode";
 
 function HeaderDropDown({ setDropDown }) {
   const label = { cinputProps: { dark: "Light" } };
   const boards = useSelector((state) => state.boards);
 
-  //   console.log(boards);
+  const [colorThem, setTheme] = useDarkMode();
+  const [darkSide, setDarkSide] = useState(colorThem === "light");
+
+  const toggleDarkModeHandler = () => {
+    setTheme(colorThem === "light" ? "dark" : "light");
+    setDarkSide(!darkSide);
+  };
 
   return (
     <div
@@ -52,9 +58,21 @@ function HeaderDropDown({ setDropDown }) {
           </div>
 
           <div className="mx-2 p-4 space-x-2 bg-slate-200 dark:bg-[#20212c] flex justify-center items-center rounded-lg ">
-            <WbSunnyIcon />
-            <Switch {...label} />
             <DarkModeIcon />
+            <Switch
+              checked={darkSide}
+              onChange={toggleDarkModeHandler}
+              className={`${
+                darkSide ? "" : "bg-gray-200"
+              } inline-block h-4 w-11 items-center rounded-full`}
+            >
+              <span
+                className={`${
+                  darkSide ?  "translate-x-6" : "translate-x-1"
+                } inline-block h-4 w-4 transform  bg-white transition `}
+              ></span>
+            </Switch>
+            <WbSunnyIcon />
           </div>
         </div>
       </div>
