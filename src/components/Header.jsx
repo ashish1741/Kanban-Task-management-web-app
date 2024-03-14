@@ -6,13 +6,28 @@ import HeaderDropDown from "./HeaderDropDown";
 import AddEditBoardModal from "../modals/AddEditBoardModal";
 import { useSelector } from "react-redux";
 import AddEditTaskModal from "../modals/AddEditTaskModal";
+import ElipsonMenu from "./ElipsonMenu";
 
 function Header({ boardOpen, setBoardOpen }) {
   const boards = useSelector((state) => state.boards);
   const board = boards.find((board) => board.isActive);
+
+  const [isDeleteModelOpen, setisDeleteModelOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const [openEditBoard, setopenEditBoard] = useState(false);
+  const [isElipsOpen ,  setIsElipsOpen] =   useState(false);
   const [boardType, setboardType] = useState("add");
+
+  const setopenEditModel = () => {
+    setBoardOpen(true);
+    setIsElipsOpen(true);
+
+  };
+
+  const setOpenDeleteModel = () => {
+    setisDeleteModelOpen(true);
+    setIsElipsOpen(false);
+  }
 
   return (
     <div className="bg-white left-0 fixed p-4 dark:bg-[#2b2c37] z-50 right-0">
@@ -39,11 +54,15 @@ function Header({ boardOpen, setBoardOpen }) {
             className="btn text-lg md:hidden"
             onClick={() => {
               setopenEditBoard((state) => !state);
+              setDropDown(false)
             }}
           >
             +
           </button>
-          <MoreVertIcon className="cursor-pointer h-6 " />
+          <MoreVertIcon className="cursor-pointer h-6 " onClick={() =>{
+             setIsElipsOpen(state => !state)
+             setboardType('edit')
+             } } />
         </div>
       </header>
 
@@ -59,9 +78,20 @@ function Header({ boardOpen, setBoardOpen }) {
           setopenEditBoard={setopenEditBoard}
           openEditBoard={openEditBoard}
           device={'mobile'}
+          type={boardType}
           
         />
       )}
+
+      {
+        isElipsOpen && <ElipsonMenu 
+        isElipsOpen = {isElipsOpen}
+        setIsElipsOpen = {setIsElipsOpen}
+        type={'Boards'}
+        setopenEditModel = {setopenEditModel}
+        setOpenDeleteModel = {setOpenDeleteModel}
+        />
+      }
     </div>
   );
 }
