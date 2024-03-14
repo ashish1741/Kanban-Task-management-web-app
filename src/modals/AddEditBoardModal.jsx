@@ -1,17 +1,22 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import boardsSlice from "../redux/boardSlice";
 
 function AddEditBoardModal({ setBoardOpen, type }) {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [isValid, setIsValid] = useState(true);
+  const [isFirstLoad, setisFirstLoad] = useState(false);
   const [newColumns, setnewColumns] = useState([
     { name: "Todo", tasks: [], id: uuidv4() },
     { name: "Doing", tasks: [], id: uuidv4() },
   ]);
+
+  const boards =  useSelector(state => state.boards).find((board) => board.isActive);
+
+
 
   const onChange = (id, newValue) => {
     setnewColumns((prevState) => {
@@ -21,6 +26,19 @@ function AddEditBoardModal({ setBoardOpen, type }) {
       return newState;  
     });
   };
+
+  
+  if (type==='edit' && isFirstLoad) {
+    setnewColumns(
+      boards.columns.map((col) => {
+        return {...col, id: uuidv4()}
+      })
+    )
+
+    setName(boards.name);
+    setisFirstLoad(false)
+    
+  }
 
 
   const onDelete = (id) => {

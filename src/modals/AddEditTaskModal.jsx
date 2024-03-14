@@ -2,12 +2,20 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useDispatch, useSelector } from "react-redux";
+import boardsSlice from "../redux/boardSlice";
 
-function AddEditTaskModal({ type, device, setopenEditBoard, openEditBoard , taskIndex ,  prevColIndex = 0, }) {
-
-  const dispatch =  useDispatch();
+function AddEditTaskModal({
+  type,
+  device,
+  setopenEditBoard,
+  openEditBoard,
+  taskIndex,
+  prevColIndex = 0,
+}) {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [isValid, setIsValid] = useState(true);
 
   const [subtask, setSubTask] = useState([
     { title: "", isCompleted: false, id: uuidv4() },
@@ -23,7 +31,6 @@ function AddEditTaskModal({ type, device, setopenEditBoard, openEditBoard , task
   const task = col ? col.tasks.find((task, index) => index === taskIndex) : [];
   const [status, setStatus] = useState(columns[prevColIndex].name);
   const [newColIndex, setNewColIndex] = useState(prevColIndex);
-
 
 
 
@@ -45,6 +52,52 @@ function AddEditTaskModal({ type, device, setopenEditBoard, openEditBoard , task
     setNewColIndex(e.target.selectedIndex);
   };
 
+  const validate = () => {
+    setIsValid(false);
+    if (!title.trim()) {
+      return false;
+    }
+    if (!description.trim()) {
+      return false;
+    }
+
+    for (let i = 0; i < subtask.length; i++) {
+      if (!subtask[i].title.trim()) {
+        return false;
+      }
+    }
+
+    setIsValid(true);
+
+    return true;
+  };
+
+  const onsubmit = (type) => {
+    setopenEditBoard(false);
+
+    if (type === "add") {
+      console.log(`add`);
+      dispatch(
+        boardsSlice.actions.addTask({
+          title,
+          description,
+          subtask,
+          status,
+          newColIndex,
+        })
+      );
+    } else {
+      dispatch(
+        boardsSlice.actions.editTask({
+          title,
+          description,
+          subtask,
+          status,
+          newColIndex,
+        })
+      );
+    }
+  };
 
   return (
     <div
@@ -140,8 +193,8 @@ function AddEditTaskModal({ type, device, setopenEditBoard, openEditBoard , task
           </button>
         </div>
 
-         {/* current Status  */}
-         <div className="mt-8 flex flex-col space-y-3">
+        {/* current Status  */}
+        <div className="mt-8 flex flex-col space-y-3">
           <label className="  text-sm dark:text-white text-gray-500">
             Current Status
           </label>
@@ -154,7 +207,19 @@ function AddEditTaskModal({ type, device, setopenEditBoard, openEditBoard , task
               <option key={index}>{column.name}</option>
             ))}
           </select>
-          </div>
+
+          <button
+            onClick={() => {
+              const isValid = validate();
+              if (isValid) {
+                onsubmit(type);
+              }
+            }}
+            className=" w-full items-center hover:opacity-70 dark:text-white dark:bg-[#635fc7] mt-8 relative  text-white bg-[#635fc7] py-2 rounded-full"
+          >
+            {type === "add" ? "Create New Task" : "Save Changes"}
+          </button>
+        </div>
       </div>
     </div>
   );
