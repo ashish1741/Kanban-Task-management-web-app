@@ -87,7 +87,7 @@ function Header({ boardOpen, setBoardOpen }) {
         isElipsOpen && <ElipsonMenu 
         isElipsOpen = {isElipsOpen}
         setIsElipsOpen = {setIsElipsOpen}
-        type={'Boards'}
+        type="Boards"
         setopenEditModel = {setopenEditModel}
         setOpenDeleteModel = {setOpenDeleteModel}
         />

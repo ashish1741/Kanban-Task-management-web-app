@@ -76,7 +76,6 @@ function AddEditTaskModal({
     setopenEditBoard(false);
 
     if (type === "add") {
-      console.log(`add`);
       dispatch(
         boardsSlice.actions.addTask({
           title,
