@@ -4,29 +4,47 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import HeaderDropDown from "./HeaderDropDown";
 import AddEditBoardModal from "../modals/AddEditBoardModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AddEditTaskModal from "../modals/AddEditTaskModal";
 import ElipsonMenu from "./ElipsonMenu";
+import DeleteModal from "../modals/DeleteModal";
+import boardsSlice from "../redux/boardSlice";
 
 function Header({ boardOpen, setBoardOpen }) {
+
+  const dispatch = useDispatch();
   const boards = useSelector((state) => state.boards);
   const board = boards.find((board) => board.isActive);
 
   const [isDeleteModelOpen, setisDeleteModelOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const [openEditBoard, setopenEditBoard] = useState(false);
-  const [isElipsOpen ,  setIsElipsOpen] =   useState(false);
+  const [isElipsOpen, setIsElipsOpen] = useState(false);
   const [boardType, setboardType] = useState("add");
 
   const setopenEditModel = () => {
     setBoardOpen(true);
     setIsElipsOpen(true);
-
   };
 
   const setOpenDeleteModel = () => {
     setisDeleteModelOpen(true);
     setIsElipsOpen(false);
+  };
+
+  const onDeletedClick = () => {
+  dispatch(boardsSlice.actions.deleteBoard())
+  dispatch(boardsSlice.actions.setBoardActive({index:0}))
+  setisDeleteModelOpen(false)
+
+      
+  }
+
+
+  const onDropDownClick = () => {
+    setDropDown(state => !state);
+    setIsElipsOpen(false)
+    setboardType('add')
   }
 
   return (
@@ -52,17 +70,18 @@ function Header({ boardOpen, setBoardOpen }) {
           <button className="btn hidden md:block ">Add a Task +</button>
           <button
             className="btn text-lg md:hidden"
-            onClick={() => {
-              setopenEditBoard((state) => !state);
-              setDropDown(false)
-            }}
+            onClick={onDropDownClick}
+            
           >
             +
           </button>
-          <MoreVertIcon className="cursor-pointer h-6 " onClick={() =>{
-             setIsElipsOpen(state => !state)
-             setboardType('edit')
-             } } />
+          <MoreVertIcon
+            className="cursor-pointer h-6 "
+            onClick={() => {
+              setIsElipsOpen((state) => !state);
+              setboardType("edit");
+            }}
+          />
         </div>
       </header>
 
@@ -77,20 +96,27 @@ function Header({ boardOpen, setBoardOpen }) {
         <AddEditTaskModal
           setopenEditBoard={setopenEditBoard}
           openEditBoard={openEditBoard}
-          device={'mobile'}
+          device={"mobile"}
           type={boardType}
-          
         />
       )}
 
-      {
-        isElipsOpen && <ElipsonMenu 
-        isElipsOpen = {isElipsOpen}
-        setIsElipsOpen = {setIsElipsOpen}
-        type="Boards"
-        setopenEditModel = {setopenEditModel}
-        setOpenDeleteModel = {setOpenDeleteModel}
+      {isElipsOpen && (
+        <ElipsonMenu
+          isElipsOpen={isElipsOpen}
+          setIsElipsOpen={setIsElipsOpen}
+          type="Boards"
+          setopenEditModel={setopenEditModel}
+          setOpenDeleteModel={setOpenDeleteModel}
         />
+      )}
+      {
+        isDeleteModelOpen && <DeleteModal 
+        setisDeleteModelOpen  = {setisDeleteModelOpen} 
+        type={'board'}
+        title={board.name}
+        onDeletedClick = {onDeletedClick}
+         />
       }
     </div>
   );
