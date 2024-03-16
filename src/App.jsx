@@ -24,6 +24,8 @@ export default function App() {
         <>
       <Header boardOpen={boardOpen} setBoardOpen={setBoardOpen} />
 
+      <Center boardOpen={boardOpen} setBoardOpen={setBoardOpen} />
+
 
         </> 
         : 

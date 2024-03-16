@@ -45,6 +45,7 @@ function Header({ boardOpen, setBoardOpen }) {
     setDropDown(state => !state);
     setIsElipsOpen(false)
     setboardType('add')
+    setopenEditBoard(true)
   }
 
   return (
