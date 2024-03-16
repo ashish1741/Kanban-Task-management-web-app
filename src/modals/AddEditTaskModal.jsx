@@ -109,7 +109,7 @@ function AddEditTaskModal({
         if (e.target !== e.currentTarget) {
           return;
         }
-        setIsAddTaskModalOpen(false);
+        setopenEditBoard(false);
       }}
     >
       {/* Modal Section */}
