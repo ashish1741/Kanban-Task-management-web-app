@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AddEditBoardModal from "../modals/AddEditBoardModal";
 import Column from "./Column";
 import EmptyBoard from "./EmptyBoard";
 import Sidebar from "./SideBar";
+import boardsSlice from "../redux/boardSlice";
 
 function Home() {
+  const dispatch = useDispatch();
   const [windowSize, setWindowSize] = useState([
     window.innerWidth,
     window.innerHeight,
@@ -70,10 +72,7 @@ function Home() {
         </>
       )}
       {isBoardModalOpen && (
-        <AddEditBoardModal
-          type="edit"
-          setBoardOpen={setIsBoardModalOpen}
-        />
+        <AddEditBoardModal type="edit" setBoardOpen={setIsBoardModalOpen} />
       )}
     </div>
   );
