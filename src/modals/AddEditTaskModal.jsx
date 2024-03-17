@@ -11,7 +11,8 @@ function AddEditTaskModal({
   openEditBoard,
   taskIndex,
   prevColIndex = 0,
-  setIsTaskModelOpen
+  setIsTaskModelOpen,
+  setDropDown
 }) {
   const dispatch = useDispatch();
   const [isFirstLoad, setIsFirstLoad] = useState(true);
@@ -97,6 +98,7 @@ function AddEditTaskModal({
   const onsubmit = (type) => {
     setopenEditBoard(false);
 
+
     if (type === "add") {
       dispatch(
         boardsSlice.actions.addTask({
@@ -118,6 +120,10 @@ function AddEditTaskModal({
         })
       );
     }
+
+    setDropDown(false)
+
+
   };
 
   return (

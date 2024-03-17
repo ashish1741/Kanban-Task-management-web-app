@@ -11,7 +11,6 @@ import DeleteModal from "../modals/DeleteModal";
 import boardsSlice from "../redux/boardSlice";
 
 function Header({ boardOpen, setBoardOpen }) {
-
   const dispatch = useDispatch();
   const boards = useSelector((state) => state.boards);
   const board = boards.find((board) => board.isActive);
@@ -21,6 +20,7 @@ function Header({ boardOpen, setBoardOpen }) {
   const [openEditBoard, setopenEditBoard] = useState(false);
   const [isElipsOpen, setIsElipsOpen] = useState(false);
   const [boardType, setboardType] = useState("add");
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 
   const setopenEditModel = () => {
     setBoardOpen(true);
@@ -33,20 +33,17 @@ function Header({ boardOpen, setBoardOpen }) {
   };
 
   const onDeletedClick = () => {
-  dispatch(boardsSlice.actions.deleteBoard())
-  dispatch(boardsSlice.actions.setBoardActive({index:0}))
-  setisDeleteModelOpen(false)
-
-      
-  }
-
+    dispatch(boardsSlice.actions.deleteBoard());
+    dispatch(boardsSlice.actions.setBoardActive({ index: 0 }));
+    setisDeleteModelOpen(false);
+  };
 
   const onDropDownClick = () => {
-    setDropDown(state => !state);
-    setIsElipsOpen(false)
-    setboardType('add')
-    setopenEditBoard(true)
-  }
+    setDropDown((state) => !state);
+    setIsElipsOpen(false);
+    setboardType("add");
+    setopenEditBoard(true);
+  };
 
   return (
     <div className="bg-white left-0 fixed p-4 dark:bg-[#2b2c37] z-50 right-0">
@@ -68,12 +65,8 @@ function Header({ boardOpen, setBoardOpen }) {
           </span>
         </div>
         <div className="flex items-center space-x-4 md:space-x-6">
-          <button className="btn hidden md:block ">Add a Task +</button>
-          <button
-            className="btn text-lg md:hidden"
-            onClick={onDropDownClick}
-            
-          >
+       
+          <button className="btn text-lg " onClick={onDropDownClick}>
             +
           </button>
           <MoreVertIcon
@@ -99,6 +92,7 @@ function Header({ boardOpen, setBoardOpen }) {
           openEditBoard={openEditBoard}
           device={"mobile"}
           type={boardType}
+          setDropDown = {setDropDown}
         />
       )}
 
@@ -111,14 +105,16 @@ function Header({ boardOpen, setBoardOpen }) {
           setOpenDeleteModel={setOpenDeleteModel}
         />
       )}
-      {
-        isDeleteModelOpen && <DeleteModal 
-        setisDeleteModelOpen  = {setisDeleteModelOpen} 
-        type={'board'}
-        title={board.name}
-        onDeletedClick = {onDeletedClick}
-         />
-      }
+      {isDeleteModelOpen && (
+        <DeleteModal
+          setisDeleteModelOpen={setisDeleteModelOpen}
+          type={"board"}
+          title={board.name}
+          onDeletedClick={onDeletedClick}
+        />
+      )}
+
+  
     </div>
   );
 }

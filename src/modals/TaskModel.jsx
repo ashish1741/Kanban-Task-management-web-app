@@ -111,7 +111,7 @@ function TaskModel({ setisTaskModelOpen, colIndex, taskIndex }) {
         </div>
 
         <p className=" pt-6 text-gray-500 tracking-widest text-sm">
-          Subtasks ({completed} of {subtasks.length})
+        Subtasks ({completed} of {subtasks && subtasks.length})
         </p>
 
         {
