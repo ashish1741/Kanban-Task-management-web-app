@@ -11,8 +11,10 @@ function AddEditTaskModal({
   openEditBoard,
   taskIndex,
   prevColIndex = 0,
+  setIsTaskModelOpen
 }) {
   const dispatch = useDispatch();
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isValid, setIsValid] = useState(true);
@@ -27,7 +29,11 @@ function AddEditTaskModal({
   );
 
   const columns = board.columns;
+
   const col = columns.find((col, index) => index === prevColIndex);
+
+
+
   const task = col ? col.tasks.find((task, index) => index === taskIndex) : [];
   const [status, setStatus] = useState(columns[prevColIndex].name);
   const [newColIndex, setNewColIndex] = useState(prevColIndex);
@@ -52,6 +58,22 @@ function AddEditTaskModal({
     setNewColIndex(e.target.selectedIndex);
   };
 
+ 
+
+  if (type === "edit" && isFirstLoad) {
+    setSubTask(
+      task.subtasks.map((subtask) => {
+        return { ...subtask, id: uuidv4() };
+      })
+    );
+    setTitle(task.title);
+    setDescription(task.description);
+    setIsFirstLoad(false);
+  }
+
+
+
+  
   const validate = () => {
     setIsValid(false);
     if (!title.trim()) {
